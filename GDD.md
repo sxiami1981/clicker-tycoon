@@ -160,7 +160,14 @@
 - 檔案：`ClickerTycoon.sb3`（Scratch 3.0，semver 3.0.0，VM 0.2.0）
 - 內容：Stage 281 個 block、Coin 精靈 4 個 block
 - 玩法：點擊大球得分、變數記分、簡易升級購買、里程碑橫幅
-- 結構已驗證：project.json 可解析、block id 無重複、parent/next 鏈結正確、ZIP 含 project.json + meta.json
+- 結構已驗證：project.json 可解析、block id 無重複、parent/next 鏈結正確、ZIP 含 project.json + meta.json + 2 個 SVG asset
+- **v2.1 修正（Scratch 官方 schema 驗證揪出嘅 5 類 bug，原本會令 Scratch 拒絕 import）**：
+  1. block 引用 input 寫成裸字串 → 必須 `[3, blockId]`（4 處）
+  2. 被引用 block 嘅 `parent` 冇指返引用者（4 處）
+  3. `data_itemoflist` 嘅 LIST 唔應該同時存在 input（field 已有）
+  4. costume `md5ext` 必須係 `<md5>.<ext>`，而唔係淨係 `.svg`；ZIP 內要有對應 asset 檔
+  5. broadcast primitive 要 `[11, 名, id]`（id 要字串）並在專案層有 `broadcasts` 清單
+- 驗證方式：官方 `scratch-parser`（unpack → parse → validate）**修復前 VALIDATION FAILED → 修復後 PASSED**（projectVersion 3、Stage+Coin、285 blocks、1 broadcast）
 - 用途：方便交學校 Scratch 功課
 
 ## 13. 遊戲設計元素實作對照
