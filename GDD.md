@@ -217,3 +217,5 @@
 - Scratch 專案 .sb3：ZIP 結構已驗證，可直接拖入 Scratch 編輯器
 - 網頁測試頁 ClickerTycoon.test.html：雙擊即跑 19 項自動測試（真 Chrome 執行）
 - v2.1 修正：升級改用反解公式直接計等級，唔再逐級 while 迴圈，總分極大都唔會卡住
+
+<!-- AUTO-SYNC-PROBE-1793928095 -->
