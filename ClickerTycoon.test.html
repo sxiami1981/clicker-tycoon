@@ -423,6 +423,7 @@ function showBanner(txt){
 }
 
 /* ---------- 商店 ---------- */
+const shopEls={};
 function renderShop(){
   const box=$("shop"); box.innerHTML="";
   for(const u of UPG){
@@ -430,15 +431,30 @@ function renderShop(){
     const el=document.createElement("div"); el.className="up";
     el.innerHTML='<div class="ico">'+u.icon+'</div><div class="info">'+
       '<div class="nm">'+u.name+'</div><div class="ds">'+u.desc+'</div>'+
-      '<div class="lvl">已買 '+n+' ・ 下一個 '+fmt(c)+'</div></div>'+
+      '<div class="lvl">已貳 '+n+' ・ 下一個 '+fmt(c)+'</div></div>'+
       '<button class="buy '+(can?"can":"cant")+'">買<small>'+fmt(c)+'</small></button>';
     const btn=el.querySelector("button");
-    if(can) btn.onclick=()=>{
-      if(S.score<c) return;
-      S.score-=c; S.up[u.key]++; S.upBought++;
+    const lvlEl=el.querySelector(".lvl");
+    const smallEl=el.querySelector("small");
+    btn.onclick=()=>{
+      const cc=cost(u.key,S.up[u.key]);
+      if(S.score<cc) return;
+      S.score-=cc; S.up[u.key]++; S.upBought++;
       beep(660,.06,"triangle"); renderShop(); update(); checkAch();
     };
+    shopEls[u.key]={btn:btn,lvl:lvlEl,small:smallEl};
     box.appendChild(el);
+  }
+}
+
+function updateShop(){
+  if(!S) return;
+  for(const u of UPG){
+    const e=shopEls[u.key]; if(!e) continue;
+    const n=S.up[u.key], c=cost(u.key,n), can=S.score>=c;
+    e.btn.className="buy "+(can?"can":"cant");
+    e.lvl.textContent="已貳 "+n+" ・ 下一個 "+fmt(c);
+    e.small.textContent=fmt(c);
   }
 }
 
@@ -482,6 +498,7 @@ function update(){
   $("progTxt").textContent=fmt(Math.max(0,S.total-prev))+" / "+fmt(next-prev);
   $("comboTxt").textContent="×"+comboMult().toFixed(1);
   $("comboBar").style.width=Math.min(100,(S.combo/Math.max(1,maxCombo()))*100)+"%";
+  updateShop();
   renderPr();
   drawGraph();
 }
@@ -588,6 +605,17 @@ init();
     ok("T17 等級可以無限升而且唔會卡住", S.level>100&&dt<1000, "Lv"+S.level+" 用時 "+dt.toFixed(1)+" ms");
     var body=document.body.innerText;
     ok("T18 無終局：冇結尾畫面", body.indexOf("通關")<0&&body.indexOf("恭喜")<0&&body.indexOf("Game Over")<0, "頁面搵唔到結尾字眼");
+    // T20 回歸：分數增長後不重新載入頁面也要能買到升級（Aidan 報的 bug）
+    reset();
+    S.score=0; renderShop(); update();
+    var b20=document.querySelector("#shop .up button.buy");
+    var before20=S.up.click;
+    if(b20) b20.click();
+    ok("T20 分數不够时無法買", S.up.click===before20, "升級級數="+S.up.click);
+    S.score=1000; update();
+    var b21=document.querySelector("#shop .up button.buy");
+    if(b21) b21.click();
+    ok("T21 分數够了不重新載入頁面後立即可買（Aidan bug 修复验證）", S.up.click===before20+1, "升級級數="+S.up.click+" score="+S.score);
     ok("T19 全程冇 JS 錯誤", errs.length===0, errs.join(" | ")||"冇錯誤");
     window.onerror=oldErr;
     return R;
