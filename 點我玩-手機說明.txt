@@ -1,27 +1,22 @@
 Clicker Tycoon — 手機點玩說明
 
-1. 開呢個網址（手機瀏覽器直接貼上都得）：
-   https://controversy-active-deemed-circuit.trycloudflare.com/index.html
+永久網址（GitHub Pages，唔會失效）：
+   https://sxiami1981.github.io/clicker-tycoon/index.html
 
+1. 開上面條網址（手機瀏覽器直接貼上都得）
 2. 或者用手機相機掃 QR 碼（QR-開遊戲.png）
-
 3. 撳「開始遊戲」就入到。支援 touch 點擊、空白鍵 / Enter、離線收益。
    進度會自動儲存喺你部手機（localStorage）。
 
-4. 測試頁（19 項自動測試）：
-   https://controversy-active-deemed-circuit.trycloudflare.com/ClickerTycoon.test.html
+測試頁（19 項自動測試）：
+   https://sxiami1981.github.io/clicker-tycoon/ClickerTycoon.test.html
 
-5. Scratch 版：
-   https://controversy-active-deemed-circuit.trycloudflare.com/ClickerTycoon.sb3
+Scratch 版：
+   https://sxiami1981.github.io/clicker-tycoon/ClickerTycoon.sb3
 
-注意：呢個網址係暫時 demo link，行喺 SClaw 嘅 Mac mini 上，
-電腦熄咗／重啟就會失效。要永久保存就用 Google Drive 個檔案：
-   My Drive / xiamishare / Aidan / Games / Clicker/ClickerTycoon.html
-   （手機用 Drive app 開啟，或下載後用瀏覽器打開）
+設計文件 GDD.md：
+   https://sxiami1981.github.io/clicker-tycoon/GDD.md
 
-檔案清單：
-   index.html             手機選單頁
-   ClickerTycoon.html     主版本 v2.1（25 KB）
-   ClickerTycoon.test.html 網頁自動測試頁（32 KB）
-   ClickerTycoon.sb3      Scratch 3.0 專案（6 KB）
-   GDD.md                 設計文件 v2.1（8.9 KB）
+GitHub repo：https://github.com/sxiami1981/clicker-tycoon
+
+Google Drive 副本：My Drive / xiamishare / Aidan / Games / Clicker/
