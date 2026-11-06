@@ -1,8 +1,8 @@
 # Clicker Tycoon — 遊戲設計文件 (GDD)
 
-**協助**：Sussus48 ｜ **日期**：2026-11-06 ｜ **版本**：v2.1
+**協助**：Sussus48 ｜ **日期**：2026-11-06 ｜ **版本**：v2.2
 **檔案**：
-- `ClickerTycoon.html` — 主版本，單一 HTML 檔，雙擊即玩，25 KB
+- `ClickerTycoon.html` — 主版本，單一 HTML 檔，雙擊即玩，26 KB
 - `ClickerTycoon.sb3` — Scratch 3.0 專案，6 KB
 - `GDD.md` — 本文件
 
@@ -216,7 +216,7 @@
 
 ## 16. 技術註記
 
-- 主檔：單一 HTML 檔案 25 KB，零外部依賴
+- 主檔：單一 HTML 檔案 26 KB，零外部依賴
 - JS 已通過 node --check 語法檢查
 - 難度數學、Prestige 表、成就值已用獨立 node 腳本驗證（單調遞增、比例正確、成就全部 < 1%）
 - 進度每 5 秒自動儲存，離開頁面亦會儲存
