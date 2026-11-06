@@ -423,6 +423,7 @@ function showBanner(txt){
 }
 
 /* ---------- 商店 ---------- */
+const shopEls={};
 function renderShop(){
   const box=$("shop"); box.innerHTML="";
   for(const u of UPG){
@@ -430,15 +431,33 @@ function renderShop(){
     const el=document.createElement("div"); el.className="up";
     el.innerHTML='<div class="ico">'+u.icon+'</div><div class="info">'+
       '<div class="nm">'+u.name+'</div><div class="ds">'+u.desc+'</div>'+
-      '<div class="lvl">已買 '+n+' ・ 下一個 '+fmt(c)+'</div></div>'+
+      '<div class="lvl">已貳 '+n+' ・ 下一個 '+fmt(c)+'</div></div>'+
       '<button class="buy '+(can?"can":"cant")+'">買<small>'+fmt(c)+'</small></button>';
     const btn=el.querySelector("button");
-    if(can) btn.onclick=()=>{
-      if(S.score<c) return;
-      S.score-=c; S.up[u.key]++; S.upBought++;
+    const lvlEl=el.querySelector(".lvl");
+    const smallEl=el.querySelector("small");
+    // 已紮下叶就寫結 handler：可负財在體刻再檢查，
+    // 不再因為當刻分數不够而永該無反應（重新載入經還要重新載入問店）
+    btn.onclick=()=>{
+      const cc=cost(u.key,S.up[u.key]);
+      if(S.score<cc) return;
+      S.score-=cc; S.up[u.key]++; S.upBought++;
       beep(660,.06,"triangle"); renderShop(); update(); checkAch();
     };
+    shopEls[u.key]={btn:btn,lvl:lvlEl,small:smallEl};
     box.appendChild(el);
+  }
+}
+
+/* 即時刷新問店可買狀態：分數增長後立即可買，無需重新載入頁面 */
+function updateShop(){
+  if(!S) return;
+  for(const u of UPG){
+    const e=shopEls[u.key]; if(!e) continue;
+    const n=S.up[u.key], c=cost(u.key,n), can=S.score>=c;
+    e.btn.className="buy "+(can?"can":"cant");
+    e.lvl.textContent="已貳 "+n+" ・ 下一個 "+fmt(c);
+    e.small.textContent=fmt(c);
   }
 }
 
@@ -482,6 +501,7 @@ function update(){
   $("progTxt").textContent=fmt(Math.max(0,S.total-prev))+" / "+fmt(next-prev);
   $("comboTxt").textContent="×"+comboMult().toFixed(1);
   $("comboBar").style.width=Math.min(100,(S.combo/Math.max(1,maxCombo()))*100)+"%";
+  updateShop();
   renderPr();
   drawGraph();
 }
