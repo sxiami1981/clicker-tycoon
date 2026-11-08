@@ -633,6 +633,9 @@ init();
     window.confirm=oc22;
     ok("T22 重設按鈵清除全部進度", S.score===0&&S.total===0&&S.level===1&&S.prestige===0&&S.pp===0&&S.ach.length===0&&S.lb.length===0&&S.up.click===0, "score="+S.score+" Lv"+S.level+" pr="+S.prestige+" pp="+S.pp+" ach="+S.ach.length+" lb="+S.lb.length);
     ok("T23 永久加成公式 x^x/2（P5=1562.5%）", prestigeBuff(5)===1562.5&&Math.abs(prestigeBuff(3)-13.5)<1e-9&&prestigeBuff(0)===0, "buff(5)="+prestigeBuff(5)+"% buff(3)="+prestigeBuff(3)+"% buff(0)="+prestigeBuff(0));
+    // T24 守衛：每個靜態按鈵都要有綁 handler（防止「有按鈵但沒反應」）
+    var orphan=[]; ["snd","rst","prgo","lbreset"].forEach(function(id){ var b=document.getElementById(id); if(!b||!b.onclick) orphan.push(id); });
+    ok("T24 每個靜態按鈵都有 handler", orphan.length===0, "未綁="+(orphan.join(",")||"無"));
     ok("T19 全程冇 JS 錯誤", errs.length===0, errs.join(" | ")||"冇錯誤");
     window.onerror=oldErr;
     return R;
