@@ -530,6 +530,15 @@ function init(){
   });
   $("snd").onclick=()=>{ S.sound=!S.sound; $("snd").textContent=S.sound?"🔊":"🔇"; save(); };
   $("prgo").onclick=()=>{ doPrestige(); update(); };
+  $("rst").onclick=()=>{
+    if(!confirm("⚠️ 重設所有進度？\n\n會清空：分數、等級、升級、成就、Prestige、PP、排行榜\n\n此動作不可復原。")) return;
+    if(!confirm("再確認一次：真的要清除全部進度？")) return;
+    try{ localStorage.removeItem(SAVE_KEY); }catch(e){}
+    S=fresh();
+    $("pname").value=S.name||"Aidan";
+    renderShop(); renderAch(); renderLB(); update(); save();
+    showBanner("🗑️ 已重設全部進度");
+  };
   $("lbreset").onclick=()=>{ if(confirm("清除排行榜？")){ S.lb=[]; renderLB(); save(); } };
   $("pname").oninput=e=>{ S.name=e.target.value; save(); };
 
@@ -616,6 +625,14 @@ init();
     var b21=document.querySelector("#shop .up button.buy");
     if(b21) b21.click();
     ok("T21 分數够了不重新載入頁面後立即可買（Aidan bug 修复验證）", S.up.click===before20+1, "升級級數="+S.up.click+" score="+S.score);
+    // T22 回歸：重設按鈵要能清除全部進度（Aidan 報：無法重設）
+    S.score=500; S.total=900; S.level=7; S.prestige=3; S.pp=100; S.ach=["first"]; S.up.click=2; S.upBought=3;
+    S.lb=[{name:"X",score:9,level:1,pr:0,t:0}];
+    var oc22=window.confirm; window.confirm=function(){return true;};
+    document.getElementById("rst").click();
+    window.confirm=oc22;
+    ok("T22 重設按鈵清除全部進度", S.score===0&&S.total===0&&S.level===1&&S.prestige===0&&S.pp===0&&S.ach.length===0&&S.lb.length===0&&S.up.click===0, "score="+S.score+" Lv"+S.level+" pr="+S.prestige+" pp="+S.pp+" ach="+S.ach.length+" lb="+S.lb.length);
+    ok("T23 永久加成公式 x^x/2（P5=1562.5%）", prestigeBuff(5)===1562.5&&Math.abs(prestigeBuff(3)-13.5)<1e-9&&prestigeBuff(0)===0, "buff(5)="+prestigeBuff(5)+"% buff(3)="+prestigeBuff(3)+"% buff(0)="+prestigeBuff(0));
     ok("T19 全程冇 JS 錯誤", errs.length===0, errs.join(" | ")||"冇錯誤");
     window.onerror=oldErr;
     return R;
